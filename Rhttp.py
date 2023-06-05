@@ -14,7 +14,6 @@ from os import (
     mkdir,
     listdir
 )
-from sys import platform
 from werkzeug.exceptions import HTTPException
 
 
@@ -24,13 +23,8 @@ app = Flask(__name__)
 app.logger.setLevel(20)
 
 # yaml config
-OS = platform
-check_path = lambda x: x.replace('/', '\\') if OS == "win32" else x
-if OS == "win32":
-    PATH = '\\'.join(__file__.split('\\')[:-1])
-else:
-    PATH = '/'.join(__file__.split('/')[:-1])
-with open(check_path(f"{PATH}/config.yaml"), 'r') as config_file:
+PATH = '/'.join(__file__.split('/')[:-1])
+with open(f"{PATH}/config.yaml", 'r') as config_file:
     CONFIG = safe_load(config_file)
 
 # app secret key
@@ -39,11 +33,11 @@ app.secret_key = CONFIG["secret key"]
 # const var
 DEBUG = CONFIG["debug"]
 if DEBUG:
-    IPADDRESS = CONFIG[f"debug {OS}"]["ip address"]
-    PORT = CONFIG[f"debug {OS}"]["http port"]
+    IPADDRESS = CONFIG[f"debug"]["ip address"]
+    PORT = CONFIG[f"debug"]["http port"]
 else:
-    IPADDRESS = CONFIG[f"prod {OS}"]["ip address"]
-    PORT = CONFIG[f"prod {OS}"]["http port"]
+    IPADDRESS = CONFIG[f"prod"]["ip address"]
+    PORT = CONFIG[f"prod"]["http port"]
 
 # ipban
 ipBan = IpBan(app, persist=not CONFIG["debug"], ipc=True)
@@ -53,9 +47,9 @@ ipBan.load_nuisances()
 
 # ----- Def ----- #
 def build_certbot_dir():
-    dirList = [f for f in listdir(check_path(PATH)) if isdir(check_path(f"{PATH}/{f}"))]
+    dirList = [f for f in listdir(PATH) if isdir(f"{PATH}/{f}")]
     if not ".well-known" in dirList:
-        mkdir(check_path(f"{PATH}/.well-known"))
+        mkdir(f"{PATH}/.well-known")
 
 
 
@@ -68,7 +62,7 @@ def index():
 def certbot(path):
     build_certbot_dir()
     return send_from_directory(
-        check_path(f"{PATH}/.well-known"),
+        f"{PATH}/.well-known",
         path
     )
 

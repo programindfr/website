@@ -8,7 +8,6 @@ from os import (
     listdir
 )
 from os.path import isdir
-from sys import platform
 from datetime import (
     datetime,
     timedelta
@@ -22,20 +21,12 @@ from threading import (
 
 
 # ----- Set Up ----- #
-# os detection
-OS = platform
 
 # absolute path of file
-if OS == "win32":
-    PATH = '\\'.join(__file__.split('\\')[:-1])
-else:
-    PATH = '/'.join(__file__.split('/')[:-1])
-
-# out is a adaptive platfom path
-check_path = lambda path: path.replace('/', '\\') if OS == "win32" else path
+PATH = '/'.join(__file__.split('/')[:-1])
 
 # safe load yaml
-with open(check_path(f"{PATH}/config.yaml"), 'r') as config_file:
+with open(f"{PATH}/config.yaml", 'r') as config_file:
     CONFIG = safe_load(config_file)
 
 # load config from yaml
@@ -44,18 +35,18 @@ DEBUG = CONFIG["debug"]
 
 # prod only avaible on linux
 if DEBUG:
-    IPADDRESS = CONFIG[f"debug {OS}"]["ip address"]
-    PORT = CONFIG[f"debug {OS}"]["https port"]
-    KEYFILE = CONFIG[f"debug {OS}"]["key file"]
-    CERTFILE = CONFIG[f"debug {OS}"]["cert file"]
+    IPADDRESS = CONFIG[f"debug"]["ip address"]
+    PORT = CONFIG[f"debug"]["https port"]
+    KEYFILE = CONFIG[f"debug"]["key file"]
+    CERTFILE = CONFIG[f"debug"]["cert file"]
 else:
-    IPADDRESS = CONFIG[f"prod {OS}"]["ip address"]
-    PORT = CONFIG[f"prod {OS}"]["https port"]
-    KEYFILE = CONFIG[f"prod {OS}"]["key file"]
-    CERTFILE = CONFIG[f"prod {OS}"]["cert file"]
+    IPADDRESS = CONFIG[f"prod"]["ip address"]
+    PORT = CONFIG[f"prod"]["https port"]
+    KEYFILE = CONFIG[f"prod"]["key file"]
+    CERTFILE = CONFIG[f"prod"]["cert file"]
 
 # load mail content
-with open(check_path(f"{PATH}/templates/mail.html"), 'r') as f:
+with open(f"{PATH}/templates/mail.html", 'r') as f:
     HTMLMAIL = f.read()
 
 # dict var for maclasse register timeout
@@ -69,30 +60,29 @@ error500Handle = None
 # ----- Def ----- #
 def build_tree(tree: dict) -> None:
     """build directory tree from config spec"""
-    mainDirList = [] #[f for f in listdir(check_path(PATH)) if isdir(check_path(f"{PATH}/{f}"))]
-    for elem in listdir(check_path(PATH)):
-        if isdir(check_path(f"{PATH}/{elem}")):
+    mainDirList = [] #[f for f in listdir(PATH) if isdir(f"{PATH}/{f}")]
+    for elem in listdir(PATH):
+        if isdir(f"{PATH}/{elem}"):
             mainDirList.append(elem)
     for mainDir in tree:
         if not mainDir in mainDirList:
-            mkdir(check_path(f"{PATH}/{mainDir}"))
-        subDirList = [] #[f for f in listdir(check_path(f"{PATH}/{mainDir}")) if isdir(check_path(f"{PATH}/{mainDir}/{f}"))]
-        for elem in listdir(check_path(f"{PATH}/{mainDir}")):
-            if isdir(check_path(f"{PATH}/{mainDir}/{elem}")):
+            mkdir(f"{PATH}/{mainDir}")
+        subDirList = [] #[f for f in listdir(f"{PATH}/{mainDir}") if isdir(f"{PATH}/{mainDir}/{f}")]
+        for elem in listdir(f"{PATH}/{mainDir}"):
+            if isdir(f"{PATH}/{mainDir}/{elem}"):
                 subDirList.append(elem)
         if tree[mainDir]:
             for subDir in tree[mainDir]:
                 if not subDir in subDirList:
-                    mkdir(check_path(f"{PATH}/{mainDir}/{subDir}"))
+                    mkdir(f"{PATH}/{mainDir}/{subDir}")
     return tree
 
 def send_mail(app: Flask, inTextVar: dict, htmlContent: str, subject: str, mailFrom: str, mailTo: str) -> None:
     """send mail with postfix"""
     app.logger.info(inTextVar["mailCode"])
-    if OS == "linux":
-        for elem in inTextVar:
-            htmlContent.replace("{{ " + elem + " }}", inTextVar[elem])
-        getoutput(f"""printf "{htmlContent}" | mail --content-type=text/html -s "{subject}" -a From:{mailFrom} {mailTo}""")
+    for elem in inTextVar:
+        htmlContent.replace("{{ " + elem + " }}", inTextVar[elem])
+    getoutput(f"""printf "{htmlContent}" | mail --content-type=text/html -s "{subject}" -a From:{mailFrom} {mailTo}""")
 
 def check_maclasseRegisterTmpData(app: Flask) -> None:
     """check timeout for maclasse register"""
