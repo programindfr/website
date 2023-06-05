@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            /* var */
+            :root {
+                --color-1: green;
+                --color-2: limegreen;
+                --color-3: blue;
+            }
+
+
+            /* main css */
+            div {
+                margin: 5px;
+            }
+            body {
+                text-align: center;
+                margin: 0;
+            }
+            h1 {
+                color: var(--color-1);
+                text-align: center;
+            }
+            footer {
+                display: flex;
+                justify-content: center;
+                padding: 5px;
+                color: var(--color-2);
+            }
+            input {
+                background-color: var(--color-2);
+                font-size: large;
+                border-radius: 50px;
+                padding: 10px 20px;
+            }
+
+
+            /* class */
+            .footer p {
+                background-color: var(--color-2);
+                color: black;
+                width: auto;
+                margin: auto;
+                padding: 20px 100px;
+                border-width: 1px;
+                border-style: dashed;
+                border-radius: 50px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!--site-->
+        <div>
+            <a href="https://{{ ipAddress }}/maclasse/register?m=1"><input type="submit" value="Accèder au site"/></a>
+        </div>
+
+        <!--text-->
+        <div>
+            <p>
+                Finalisez dès maintenant votre inscription avec le code suivant !
+            </p>
+            <h1>{{ mailCode }}</h1>
+            <p>
+                Vous avez reçu ce mail parce que vous vous êtes inscrit dans l'espace "Ma classe" sur <a href="https://{{ ipAddress }}">{{ ipAddress }}</a>.
+                <br>
+                Si vous n'êtes pas à l'origine de cette inscription, merci de supprimer ce mail.
+                <br>
+                Ceci est un mail automatique, merci de ne pas y répondre.
+            </p>
+        </div>
+
+        <!--footer-->
+        <footer>
+            <div class="footer">
+                <p>©2022 {{ websiteName }} | {{ contactMail }}</p>
+            </div>
+        </footer>
+
+    </body>
+
+</html>

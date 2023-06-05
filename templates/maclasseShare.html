@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/image/color-->
+    <div>
+        <h1>{{ title }}</h1>
+        {% if bgPic %}
+            <img src="/maclasse/dl/{{ bgPic }}?r=custom" alt="{{ bgPic }}" class="bgPic">
+        {% endif %}
+        <script type="text/javascript">color("{{ color }}");</script>
+    </div>
+
+    <!--qrcode-->
+    <div>
+        <img src="/maclasse/dl/{{ id }}?r=pictures">
+        <p><a href="/maclasse/dl/{{ id }}?r=pictures" download><input type="submit" value="Télécharger l'image"/></a></p>
+    </div>
+
+    <!--retour-->
+    <div>
+        <a href="/maclasse/index"><input type="submit" value="Retour"/></a>
+    </div>
+
+{% endblock %}

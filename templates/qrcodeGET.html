@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/text-->
+    <div>
+        <h1>Générateur de code QR</h1>
+    </div>
+
+    <!--get link-->
+    <form action="/qrcode" method="POST">
+        <div>
+            <label for="data">Texte/lien pour le code QR : </label>
+            <input type="text" name="data" id="data"/>
+        </div>
+        <div>
+            <input type="submit" value="Générer"/>
+        </div>
+    </form>
+
+    <!--qrcode-->
+    <div>
+        {% block qrcode %}
+        {% endblock %}
+    </div>
+
+{% endblock %}

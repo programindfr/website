@@ -1,0 +1,110 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/image/color-->
+    <div>
+        <h1>{{ title }}</h1>
+        {% if bgPic %}
+            <img src="/maclasse/dl/{{ bgPic }}?r=custom" alt="{{ bgPic }}" class="bgPic">
+        {% endif %}
+        <script type="text/javascript">color("{{ color }}");</script>
+    </div>
+
+    <fieldset name="fieldsetMenu">
+    <legend>Menu</legend>
+        <!--access lock-->
+        <div>
+            {% if accessLock and isProf %}
+                <form action="/maclasse/index?lock=0" method="POST"><input type="submit" value="Ouvrir l'accès aux élèves"/></form>
+            {% elif (not accessLock) and isProf %}
+                <form action="/maclasse/index?lock=1" method="POST"><input type="submit" value="Révoquer l'accès aux élèves"/></form>
+            {% endif %}
+        </div>
+
+        <!--page custom-->
+        {% if isProf %}
+            <div>
+                <form action="/maclasse/index?color=1" method="POST">
+                    <input type="color" id="color" name="color" value="{{ color }}"/>
+                    <label for="color">Couleur de la page</label>
+                    <input type="submit" value="Valider"/>
+                </form>
+                <script type="text/javascript">
+                    if ("{{ color }}" === '') {
+                        document.getElementById("color").value = document.querySelector(":root").style.getPropertyValue("--color-1");
+                    }
+                </script>
+            </div>
+            <div>
+                <form action="/maclasse/index?newTitle=1" method="POST">
+                    <input type="text" id="newTitle" name="newTitle" placeholder="Titre de page" required/>
+                    <input type="submit" value="Valider"/>
+                </form>
+            </div>
+            <div>
+                <form action="/maclasse/index?bgPic=1" method="POST" enctype="multipart/form-data">
+                    <label for="file">
+                        <img src="/static/file-earmark-image.svg" alt="file-earmark-plus">
+                        Ajouter une photo d'accueil
+                    </label>
+                    <input type="file" id="bgPic" name="bgPic" onchange="addFile(this, 'arrow-repeat-bgPic', 'p-bgPic');">
+                    <p id="p-bgPic"></p>
+                    <img src="/static/arrow-repeat.svg" alt="arrow-repeat.svg" id="arrow-repeat-bgPic">
+                </form>
+            </div>
+        {% endif %}
+
+        <!--add file-->
+        <div>
+            <form action="/maclasse/index/{{ path }}?file=1" method="POST" enctype="multipart/form-data">
+                <label for="file">
+                    <img src="/static/file-earmark-plus.svg" alt="file-earmark-plus">
+                    Ajouter un fichier
+                </label>
+                <input type="file" id="file" name="file" onchange="addFile(this, 'arrow-repeat', 'p-file');">
+                <p id="p-file"></p>
+                <img src="/static/arrow-repeat.svg" alt="arrow-repeat.svg" id="arrow-repeat">
+            </form>
+        </div>
+
+        <!--logout-->
+        <div>
+            <img src="/static/box-arrow-left.svg" alt="box-arrow-left.svg">
+            <a href="/maclasse/logout"><input type="submit" value="Se déconnecter"/></a>
+        </div>
+
+        <div>
+            <p>Espace utilisé : {{ size }}</p>
+        </div>
+    </fieldset>
+
+    <!--list file-->
+    <br>
+    <fieldset name="fieldsetFile">
+    <legend>Fichiers</legend>
+        {% for nb in range(0, (filesNames|length)) %}
+            <div class="box">
+                <img src="/static/file-earmark-binary.svg" alt="file-earmark-binary">
+                {% if oldFilename == filesNames[nb] %}
+                    <form action="/maclasse/index/{{ path }}?oldFilename={{ oldFilename }}" method="POST">
+                        <input type="text" id="newFilename" name="newFilename" placeholder="{{ '.'.join(oldFilename.split('.')[:-1]) }}" required/>
+                        <input type="submit" value="Valider"/>
+                    </form>
+                    <a href="/maclasse/index/{{ path }}"><input type="submit" value="Annuler"/></a>
+                    <script type="text/javascript">
+                        document.getElementById("newFilename").select();
+                    </script>
+                {% else %}
+                    <p style="display:inline">{{ '.'.join(filesNames[nb].split('.')[:-1]) }}</p>
+                    <a href="/maclasse/index/{{ path }}?rename={{ filesNames[nb] }}"><input type="submit" value="Renommer"/></a>
+                {% endif %}
+                <form action="/maclasse/share/{{ path }}{{ filesNames[nb] }}" method="POST"><input type="submit" value="Partager"/></form>
+                {% if isProf %}
+                    <a href="/maclasse/dl/{{ path }}{{ filesNames[nb] }}?r=cloud" download><input type="submit" value="Télécharger"/></a>
+                    <a href="/maclasse/delete/{{ path }}{{ filesNames[nb] }}?file=1"><input type="submit" value="Supprimer"/></a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </fieldset>
+
+{% endblock %}

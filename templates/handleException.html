@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/text-->
+    <div>
+        <h1>{{ err.name }}</h1>
+        <p>{{ err }}</p>
+        <img src="/static/gear.svg" alt="gear.svg" id="gear">
+        <script type="text/javascript">
+            rotate("gear", 24, 4);
+        </script>
+        <img src="/static/gear.svg" alt="gear.svg" id="gear2">
+        <script type="text/javascript">
+            rotate("gear2", 24, -4);
+        </script>
+    </div>
+
+{% endblock %}

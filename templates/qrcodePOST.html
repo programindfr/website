@@ -1,0 +1,5 @@
+{% extends "qrcodeGET.html" %}
+{% block qrcode %}
+    <img src="/qrcode/dl/{{ id }}" alt="{{ id }}" class="qrcode">
+    <a href="/qrcode/dl/{{ id }}" download><input type="submit" value="Télécharger l'image"/></a>
+{% endblock %}

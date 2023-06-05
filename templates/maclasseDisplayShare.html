@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/image/color-->
+    <div>
+        <h1>{{ title }}</h1>
+        {% if bgPic %}
+            <img src="/maclasse/dl/{{ bgPic }}?r=custom" alt="{{ bgPic }}" class="bgPic">
+        {% endif %}
+        <script type="text/javascript">color("{{ color }}");</script>
+    </div>
+
+    <!--player-->
+    <audio controls="" autoplay="">
+        <source src="/maclasse/dl/{{ picId }}?r=share" type="audio/mpeg">
+        Votre navigateur ne semble pas prendre en charge l'élément audio.
+    </audio> 
+
+{% endblock %}

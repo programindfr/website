@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/text-->
+    <div>
+        <h1>Ma classe</h1>
+    </div>
+
+    <!--login-->
+    <form action="/maclasse/login" method="POST">
+        <fieldset>
+        <legend>Connection à ma classe</legend>
+            <div>
+                <label for="id">Identifiant : </label>
+                <input type="text" id="id" name="id" autocomplete="on"/>
+            </div>
+            <div>
+                <label for="pw">Mot de passe : </label>
+                <input type="password" id="pw" name="pw"/>
+            </div>
+            <div>
+                <input type="checkbox" id="keepConnect" name="keepConnect" value="1" checked>
+                <label for="keepConnect">Rester connecté</label>
+            </div>
+            <div>
+                {{ recaptcha }}
+            </div>
+            <div>
+                <p class="warn">{{ warn }}</p>
+            </div>
+            <div>
+                <input type="submit" value="Se connecter"/>
+            </div>
+        </fieldset>
+    </form>
+
+    <!--autre-->
+    <div>
+        <p>Pas de compte ? <a href="/maclasse/register">Créer un compte</a>.</p>
+    </div>
+
+{% endblock %}

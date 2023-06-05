@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/text-->
+    <div>
+        <h1>Bienvenue sur {{ websiteName }}</h1>
+    </div>
+
+    <!--info-->
+    <fieldset>
+        <legend>Informations du navigateur</legend>
+        <div>
+            <p id="width"></p>
+        </div>
+        <div>
+            <p id="height"></p>
+        </div>
+        <div>
+            <p>Adresse ip(v4) : {{ data.__dict__["environ"]["REMOTE_ADDR"] }}</p>
+        </div>
+        <div>
+            <p>Port utilisé : {{ data.__dict__["environ"]["REMOTE_PORT"] }}</p>
+        </div>
+        <script>screenSize();</script>
+    </fieldset>
+
+{% endblock %}

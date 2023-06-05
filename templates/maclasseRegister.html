@@ -1,0 +1,64 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <!--titre/text-->
+    <div>
+        <h1>Ma classe</h1>
+    </div>
+
+    <!--explication-->
+    <div>
+        <p class="warn">
+            Tous les champs suivants sont obligatoires.
+        </p>
+        <p>
+            L'adresse mail n'est pas stockée sur nos serveurs, elle constitue seulement une étape de vérification.
+        </p>
+    </div>
+
+    <!--register-->
+    <form action="/maclasse/register" method="POST">
+        <fieldset>
+        <legend>Inscription</legend>
+            <div>
+                <label for="email">Adresse mail académique : </label>
+                <input type="email" id="email" name="email" autocomplete="on" required/>
+            </div>
+            <div>
+                <label for="id">Identifiant pour la classe : </label>
+                <input type="text" id="id" name="id" autocomplete="on" required/>
+            </div>
+            <div>
+                <label for="pw">Mot de passe élève : </label>
+                <input type="password" id="pw" name="pw" required/>
+            </div>
+            <div>
+                <label for="pw2">Confirmation du mot de passe élève : </label>
+                <input type="password" id="pw2" name="pw2" required/>
+            </div>
+            <div>
+                <label for="profPw">Mot de passe professeur : </label>
+                <input type="password" id="profPw" name="profPw" required/>
+            </div>
+            <div>
+                <label for="profPw2">Confirmation du mot de passe professeur : </label>
+                <input type="password" id="profPw2" name="profPw2" required/>
+            </div>
+            <div>
+                {{ recaptcha }}
+            </div>
+            <div>
+                <p class="warn">{{ warn }}</p>
+            </div>
+            <div>
+                <input type="submit" value="S'incrire"/>
+            </div>
+        </fieldset>
+    </form>
+
+    <!--retour-->
+    <div>
+        <a href="/maclasse/login"><input type="submit" value="Retour"/></a>
+    </div>
+
+{% endblock %}

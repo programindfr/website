@@ -1,0 +1,131 @@
+/* var */
+:root {
+    --color-1: green;
+    --color-2: limegreen;
+    --color-3: blue;
+}
+
+
+/* main css */
+div {
+    margin: 5px;
+}
+body {
+    text-align: center;
+    margin: 0;
+}
+h1 {
+    color: var(--color-1);
+    text-align: center;
+}
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    color: var(--color-2);
+}
+fieldset {
+    width: max-content;
+    margin: 0 auto;
+}
+fieldset[name=fieldsetMenu] {
+    width: 95%;
+    text-align: left;
+}
+fieldset[name=fieldsetFile] {
+    width: 95%;
+    text-align: left;
+}
+legend {
+    color: var(--color-1);
+    font-size: 17px;
+}
+img {
+    width: max-content;
+    height: max-content;
+}
+
+
+/* class */
+.box {
+    width: 95%;
+    display: inline-block;
+    padding: 5px;
+    border: 3px solid var(--color-2);
+    text-align: left;
+}
+.box:hover {
+    border: 3px solid var(--color-3);
+}
+.footer p {
+    background-color: var(--color-2);
+    color: black;
+    width: auto;
+    margin: auto;
+    padding: 20px 100px;
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 50px;
+}
+.bgPic {
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.warn {
+    color: red;
+}
+.qrcode {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* id */
+#p-file, #p-bgPic {
+    display: inline;
+    color: red;
+}
+#arrow-repeat, #arrow-repeat-bgPic {
+    opacity: 0;
+}
+#gear {
+    width: 5%;
+}
+#gear2 {
+    width: 3%;
+    margin-left: -0.5%;
+    position: absolute;
+}
+
+
+/* reCAPTCHA */
+.g-recaptcha > div {
+    text-align: center;
+    width: auto !important;
+    height: auto !important;
+}
+
+
+/* navbar */
+.topnav {
+    overflow: hidden;
+    background-color: gray;
+}
+.topnav a {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+.topnav a:hover, .topnav a.active:hover {
+    background-color: var(--color-2);
+}
+.topnav a.active {
+    background-color: var(--color-1);
+    color: white;
+}
