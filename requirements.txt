@@ -17,6 +17,7 @@ importlib-metadata
 itsdangerous
 Jinja2
 # mariadb==1.0.11
+mariadb
 MarkupSafe
 Pillow
 pycparser

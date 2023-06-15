@@ -9,5 +9,14 @@ source bin/activate
 python -m pip install -r requirements.txt
 ```
 
+# exit
+```bash
+deactivate
+```
+
 # fix flask_recaptcha.py lib
-in Lib\site-packages\flask_recaptcha.py, comment `from jinja2 import Markup` and add `from markupsafe import Markup`
+in `lib/python3.x/site-packages/flask_recaptcha.py`, comment `from jinja2 import Markup` and add `from markupsafe import Markup`
+
+# Requirements
+- [installing mariadb connectorc](https://mariadb.com/kb/en/about-mariadb-connector-c/#installing-mariadb-connectorc-on-linux)
+- [setup mail server](https://raspberrytips.com/mail-server-raspberry-pi/)

@@ -1,0 +1,56 @@
+recaptcha:
+  site key: google recaptcha site key
+  secret key: google recaptcha secret key
+
+debug:
+  ip address: local ip
+  key file: path to privkey.pem
+  cert file: path to fullchain.pem
+  http port: http bind port
+  https port: https bind port
+
+prod:
+  ip address: website domain name
+  key file: path to privkey.pem
+  cert file: path to fullchain.pem
+  http port: http bind port
+  https port: https bind port
+
+directory tree:
+  maclasse:
+    - cloud
+    - pictures
+    - custom
+  depot: Null
+
+audio:
+  - wav
+  - aif
+  - m4a
+  - mp4
+  - aac
+  - ogg
+  - oga
+
+secret key: flask secret key
+
+database:
+  user: database username
+  password: database password
+  host: database ip
+  name: database name
+  version: mariadb library version (outdated)
+
+memo:
+  command: certbot certonly --webroot -w /path/to/folder -d domain.name
+  mail: printf "<html><p style='color:red;'>Hello World !</p></html>" | mail --content-type=text/html -s "subject" -a From:noreply@domain.name someone@provider.domain
+
+mail:
+  dev: dev mail
+  contact: contact mail
+  error: error@domain.name
+  noreply: noreply@domain.name
+
+website name: website name
+debug: False or True
+version: website version (maybe outdated)

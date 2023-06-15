@@ -79,11 +79,15 @@ from web_main_setup import (
     conn,
     cur
 )
+from blueprint_qrcode import blueprintQrcode
+from blueprint_depot import blueprintDepot
 
 
 
 # ----- Set Up ----- #
 app = Flask(__name__)
+app.register_blueprint(blueprintQrcode, url_prefix="/qrcode")
+app.register_blueprint(blueprintDepot, url_prefix="/depot")
 app.logger.setLevel(20)
 
 # app secret key

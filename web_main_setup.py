@@ -21,7 +21,6 @@ from threading import (
 
 
 # ----- Set Up ----- #
-
 # absolute path of file
 PATH = '/'.join(__file__.split('/')[:-1])
 
@@ -75,7 +74,7 @@ def build_tree(tree: dict) -> None:
             for subDir in tree[mainDir]:
                 if not subDir in subDirList:
                     mkdir(f"{PATH}/{mainDir}/{subDir}")
-    return tree
+    # return tree
 
 def send_mail(app: Flask, inTextVar: dict, htmlContent: str, subject: str, mailFrom: str, mailTo: str) -> None:
     """send mail with postfix"""
