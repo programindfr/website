@@ -52,21 +52,21 @@ with open(f"{PATH}/templates/mail.html", 'r') as f:
 maclasseRegisterTmpData = {}
 
 # var for located potential error
-error500Handle = None
+error500Handle = None   # ?
 
 
 
 # ----- Def ----- #
-def build_tree(tree: dict) -> None:
+def build_tree(tree: dict) -> dict:
     """build directory tree from config spec"""
-    mainDirList = [] #[f for f in listdir(PATH) if isdir(f"{PATH}/{f}")]
+    mainDirList = []    # [f for f in listdir(PATH) if isdir(f"{PATH}/{f}")]
     for elem in listdir(PATH):
         if isdir(f"{PATH}/{elem}"):
             mainDirList.append(elem)
     for mainDir in tree:
         if not mainDir in mainDirList:
             mkdir(f"{PATH}/{mainDir}")
-        subDirList = [] #[f for f in listdir(f"{PATH}/{mainDir}") if isdir(f"{PATH}/{mainDir}/{f}")]
+        subDirList = [] # [f for f in listdir(f"{PATH}/{mainDir}") if isdir(f"{PATH}/{mainDir}/{f}")]
         for elem in listdir(f"{PATH}/{mainDir}"):
             if isdir(f"{PATH}/{mainDir}/{elem}"):
                 subDirList.append(elem)
@@ -74,7 +74,7 @@ def build_tree(tree: dict) -> None:
             for subDir in tree[mainDir]:
                 if not subDir in subDirList:
                     mkdir(f"{PATH}/{mainDir}/{subDir}")
-    # return tree
+    return tree
 
 def send_mail(app: Flask, inTextVar: dict, htmlContent: str, subject: str, mailFrom: str, mailTo: str) -> None:
     """send mail with postfix"""

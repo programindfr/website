@@ -1,4 +1,3 @@
-The project is not longer windows compatible.
 This projet is an upgrade of my actual website so the code is not working yet.
 
 # setup

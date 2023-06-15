@@ -1,83 +1,26 @@
 # ----- Lib ----- #
-from gevent import (
-    monkey,
-    spawn
-)
-monkey.patch_all()
 from flask import (
     Blueprint,
-    Flask,
     request,
-    render_template,
-    redirect,
     send_from_directory,
-    make_response,
     abort
 )
 from werkzeug.utils import secure_filename
-from werkzeug.exceptions import HTTPException
-from werkzeug.security import (
-    generate_password_hash,
-    check_password_hash
-)
-from flask_recaptcha import ReCaptcha
-from gevent.pywsgi import WSGIServer
-from subprocess import getoutput
-from flask_ipban import IpBan
-from secrets import (
-    token_urlsafe,
-    token_hex
-)
+from secrets import token_urlsafe
 from os import (
     mkdir,
     listdir,
-    walk,
-    rename,
-    remove,
-    rmdir
+    remove
 )
-from os.path import (
-    isdir,
-    isfile,
-    join as osjoin,
-    islink,
-    getsize
-)
-from qrcode import make
-from sys import platform
-from datetime import (
-    datetime,
-    timedelta
-)
-from time import sleep
-from threading import (
-    Thread,
-    current_thread
-)
+from os.path import isdir
 from json import (
     load,
     dump
 )
-from ssl import SSLError
 from web_main_setup import (
-    OS,
-    check_path,
     PATH,
-    CONFIG,
-    __version__,
-    DEBUG,
-    IPADDRESS,
-    PORT,
-    KEYFILE,
-    CERTFILE,
-    HTMLMAIL,
-    maclasseRegisterTmpData,
     error500Handle,
-    build_tree,
-    send_mail,
     add_versions,
-    maclasseRegisterTmpDataThread,
-    conn,
     cur
 )
 
@@ -98,7 +41,7 @@ def depot_GET(token, filename):
 
 @blueprintDepot.route("/", methods=["POST"])
 def depot_POST():
-    global error500Handle
+    global error500Handle   # ?
     tokenGET, tokenPOST = token_urlsafe(), token_urlsafe()
     mkdir(f"{PATH}/depot/{tokenGET}")
     mkdir(f"{PATH}/depot/{tokenGET}/log")
@@ -108,60 +51,60 @@ def depot_POST():
     for filename in allFiles:
         for fileObject in allFiles[filename]:
             try:
-                fileObject.save(check_path(f"{PATH}/depot/{tokenGET}/{secure_filename(fileObject.filename)}"))
+                fileObject.save(f"{PATH}/depot/{tokenGET}/{secure_filename(fileObject.filename)}")
                 filesVersions[secure_filename(fileObject.filename)] = add_versions("0.0.0", request.form.get(fileObject.filename))
-                with open(check_path(f"{PATH}/depot/{tokenGET}/log/version.json"), 'w') as f:
+                with open(f"{PATH}/depot/{tokenGET}/log/version.json", 'w') as f:
                     dump(filesVersions, f)
             except BaseException as err:
-                app.logger.error(err)
-                error500Handle = err
+                blueprintDepot.logger.error(err)
+                error500Handle = err    # ?
                 abort(500) # trier les erreurs
     return {"tokenGET": tokenGET, "tokenPOST": tokenPOST}
 
-@app.route("/<string:token>", methods=["PUT"])
+@blueprintDepot.route("/<string:token>", methods=["PUT"])
 def depot_PUT(token):
-    global error500Handle
+    global error500Handle   # ?
     cur.execute("SELECT tokenGET FROM depot WHERE tokenPOST=?", (token,))
     userData = cur.fetchall()
     if not userData:
         abort(403)
-    with open(check_path(f"{PATH}/depot/{userData[0][0]}/log/version.json"), 'r') as f:
+    with open(f"{PATH}/depot/{userData[0][0]}/log/version.json", 'r') as f:
         filesVersions = load(f)
     allFiles = request.files.to_dict(flat=False)
     for filename in allFiles:
         for fileObject in allFiles[filename]:
             try:
-                fileObject.save(check_path(f"{PATH}/depot/{userData[0][0]}/{secure_filename(fileObject.filename)}"))
+                fileObject.save(f"{PATH}/depot/{userData[0][0]}/{secure_filename(fileObject.filename)}")
                 filesVersions[secure_filename(fileObject.filename)] = add_versions(
                     filesVersions[secure_filename(fileObject.filename)],
                     request.form.get(fileObject.filename)
                 )
-                with open(check_path(f"{PATH}/depot/{userData[0][0]}/log/version.json"), 'w') as f:
+                with open(f"{PATH}/depot/{userData[0][0]}/log/version.json", 'w') as f:
                     dump(filesVersions, f)
             except BaseException as err:
-                app.logger.error(err)
-                error500Handle = err
+                blueprintDepot.logger.error(err)
+                error500Handle = err    # ?
                 abort(500) # trier les erreurs
     return ('', 200)
 
-@app.route("/<string:token>/<string:filename>", methods=["DELETE"])
+@blueprintDepot.route("/<string:token>/<string:filename>", methods=["DELETE"])
 def depot_DELETE(token, filename):
-    global error500Handle
+    global error500Handle   # ?
     cur.execute("SELECT tokenGET FROM depot WHERE tokenPOST=?", (token,))
     userData = cur.fetchall()
     if not userData:
         abort(403)
-    with open(check_path(f"{PATH}/depot/{userData[0][0]}/log/version.json"), 'r') as f:
+    with open(f"{PATH}/depot/{userData[0][0]}/log/version.json", 'r') as f:
         filesVersions = load(f)
     try:
-        remove(check_path(f"{PATH}/depot/{userData[0][0]}/{secure_filename(filename)}"))
+        remove(f"{PATH}/depot/{userData[0][0]}/{secure_filename(filename)}")
         filesVersions[secure_filename(filename)] = None
-        with open(check_path(f"{PATH}/depot/{userData[0][0]}/log/version.json"), 'w') as f:
+        with open(f"{PATH}/depot/{userData[0][0]}/log/version.json", 'w') as f:
             dump(filesVersions, f)
     except FileNotFoundError:
         abort(404)
     except BaseException as err:
-        app.logger.error(err)
-        error500Handle = err
+        blueprintDepot.logger.error(err)
+        error500Handle = err    # ?
         abort(500)
     return ('', 200)
